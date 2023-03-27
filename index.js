@@ -30,10 +30,17 @@ console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin
   Aşağıdaki skor1 ve skor2 kodlarını inceleyiniz ve aşağıdaki soruları altına not alarak cevaplayın
   
   1. skor1 ve skor2 arasındaki fark nedir?
+
+  skor1de skor değişkeni scope içinde tanımlı olduğundan başka yerden ulaşılamaz fakat skor2de globalde tanımlandığından her yerden ulaşılabilir.
   
   2. Hangisi bir closure kullanmaktadır? Nasıl tarif edebilirsin? (yarınki derste öğreneceksin :) )
+
+  skor1 closure kullanıyor çünkü içerisinde saklı olan bilgiye sadece skor1 ulaşabilir :)
   
   3. Hangi durumda skor1 tercih edilebilir? Hangi durumda skor2 daha mantıklıdır?
+
+  genel bir tanımlama yapıp diğer fonksiyonlar tarafından ulaşılmasıni istediğimiz durumlar olduğunda skor2 daha mantıklı fakat fonksiyon içinde ihtiyacımız olan ve ona has kalmasını istediğimiz değişkenler için skor1i kullanmak daha mantıklı diyebiliriz.
+
 */
 
 // skor1 kodları
@@ -64,11 +71,11 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+function takimSkoru() {
+  const skor =   Math.floor(Math.random() * 16) + 10;
+  return skor
+    console.log(takimSkoru);
 }
-
-
 
 
 /* Görev 3: macSonucu() 
@@ -86,13 +93,22 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
 }
 */ 
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
+function macSonucu(takimSkoru,ceyrek) {
+  var KonukTakim = 0;
+  var EvSahibi = 0;
+  
+  for (var i= 0; i<ceyrek; i++) {
+   EvSahibi += takimSkoru();
+   KonukTakim += takimSkoru();
+    
+  }
+  return {
+    'EvSahibi' : EvSahibi,
+    'KonukTakim' : KonukTakim
+    }
+  
 }
-
-
-
-
+console.log(macSonucu(takimSkoru,4));
 
 
 /* Zorlayıcı Görev 4: periyotSkoru()
@@ -109,10 +125,19 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   */
 
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+function periyotSkoru(takimSkoru) {
+  var EvSahibi = 0;
+  var KonukTakim = 0;
+  
+  EvSahibi += takimSkoru();
+  KonukTakim += takimSkoru();
+  return {
+    'EvSahibi' : EvSahibi,
+    'KonukTakim' : KonukTakim
+  }
 
 }
+console.log(periyotSkoru(takimSkoru));
 
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
@@ -146,9 +171,39 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-}
+function skorTabelasi(periyotSkoru,takimSkoru,ceyrek) {
+  var skor = [];
+  var indeks= 0;
+  var topEvSahibi = 0;
+  var topKonukTakim = 0;
+  var evSahibi;
+  var konukTakim;
+  for (var i=0; i<ceyrek; i++) {
+    evSahibi = takimSkoru();
+    konukTakim = takimSkoru();
+    skor.push((i+1) + '.periyot : Ev Sahibi: ' + evSahibi + ' -Konuk Takım:' + konukTakim);
+    topEvSahibi += evSahibi;
+    topKonukTakim += konukTakim;
+    if (i ==3 ) {
+      for(var k = i+1; k++; ) {
+        if (topEvSahibi != topKonukTakim)
+        break;
+          evSahibi = takimSkoru();
+          konukTakim = takimSkoru();
+    skor.push((k+1) + '.uzatma: EvSahibi: ' + evSahibi + ' - Konuk Takım:' + konukTakim);
+        topEvSahibi += evSahibi;
+        topKonukTakim += konukTakim
+      }
+    }
+  }
+    skor.push('Maç Sonucu: EvSahibi: ' + topEvSahibi + ' -KonukTakim:' + topKonukTakim);
+
+  return skor;
+  }
+  console.log(skorTabelasi(periyotSkoru,takimSkoru,4));
+  
+
+
 
 
 
